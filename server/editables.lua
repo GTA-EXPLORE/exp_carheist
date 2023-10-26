@@ -1,5 +1,6 @@
-ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+ESX = exports["es_extended"]:getSharedObject()
+-- ESX = nil
+-- TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 function GetPoliceCount()
     local players = ESX.GetPlayers()
