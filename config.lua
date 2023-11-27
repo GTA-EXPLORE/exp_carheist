@@ -2,7 +2,7 @@ LANGUAGE = 'en'
 
 VEHICLE_EARNINGS = 30000 
 MAX_DAMAGE_LOSS = 10000
-POLICE_REQUIRED = 1
+POLICE_REQUIRED = 0
 INTERVAL = 60*60000 -- 60 minutes
 
 START_SCENE = {
@@ -50,82 +50,15 @@ PLANE = {
 }
 
 GUARDS = {
-    {
-        coords = vector3(-1104.2, -3056.0, 14.7165),
-        heading = 270.87,
-        model = 's_m_m_highsec_02',
-        weapon = "WEAPON_PISTOL"
+    models = {
+        "s_m_m_highsec_02",
+        "ig_fbisuit_01"
     },
-    {
-        coords = vector3(-1084.5, -3067.2, 14.7166),
-        heading = 354.93,
-        model = 'ig_fbisuit_01',
-        weapon = "WEAPON_PISTOL"
+    amount = 20,
+    spawn_range = 75.0,
+    weapons = {
+        "WEAPON_PISTOL"
     },
-    {
-        coords = vector3(-1084.6, -3091.6, 13.9444),
-        heading = 268.28,
-        model = 's_m_m_highsec_02',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1094.9, -3102.7, 13.9444),
-        heading = 268.3,
-         model = 's_m_m_highsec_02',
-         weapon = "WEAPON_PISTOL"
-        },
-    {
-        coords = vector3(-1115.2, -3097.9, 13.9444),
-        heading = 359.44,
-        model = 'ig_fbisuit_01',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1099.8, -3024.3, 13.9449),
-        heading = 174.77,
-        model = 's_m_m_highsec_02',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1087.6, -3020.2, 13.9453),
-        heading = 180.79,
-        model = 'ig_fbisuit_01',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1067.8, -3034.7, 13.9457),
-        heading = 180.79,
-        model = 'ig_fbisuit_01',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1059.2, -3060.8, 13.9845),
-        heading = 180.79,
-        model = 's_m_m_highsec_02',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1051.6, -3081.5, 13.9376),
-        heading = 180.79,
-        model = 'ig_fbisuit_01',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1042.1, -3094.3, 13.9450),
-        heading = 180.79,
-        model = 's_m_m_highsec_02',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1043.0, -3109.2, 13.9444),
-        heading = 180.79,
-        model = 'ig_fbisuit_01',
-        weapon = "WEAPON_PISTOL"
-    },
-    {
-        coords = vector3(-1050.7, -3107.4, 13.9444),
-        heading = 180.79,
-        model = 's_m_m_highsec_02',
-        weapon = "WEAPON_PISTOL"
-    },
+    armour = 50,
+    accuracy = 50
 }
