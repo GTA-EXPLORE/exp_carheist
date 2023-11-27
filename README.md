@@ -4,6 +4,12 @@ Experience the thrill of high-stakes heists with our exclusive **Car Heist** scr
 # Preview
 _Coming Soon._
 
+# Install
+- Clone or Download the [repository](https://github.com/GTA-EXPLORE/exp_carheist).
+- Add the **exp_carheist** to your resources folder.
+- Install [**exp_target_menu**](https://forum.cfx.re/t/free-explore-target-menu/5176144) (or ox_target).
+- Add `ensure exp_carheist` to your **server.cfg**.
+
 # Documentation
 You can find the complete [documentation](https://discord.com/channels/957638068465201172/1158689777038671992) on our [Discord](https://discord.gg/DnW5vvhkUc).
 
