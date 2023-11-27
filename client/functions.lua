@@ -1,34 +1,16 @@
+---@param str string
+---@return string
 function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
 
-function loadPtfxAsset(dict)
-    while not HasNamedPtfxAssetLoaded(dict) do
-        RequestNamedPtfxAsset(dict)
-        Citizen.Wait(50)
-	end
+---@param model number Model Hash
+function _RequestModel(model)
+    RequestModel(model)
+    while not HasModelLoaded(model) do Wait(50) end
 end
 
-function loadAnimDict(dict)
-    while not HasAnimDictLoaded(dict) do
-        RequestAnimDict(dict)
-        Citizen.Wait(50)
-    end
-end
-
-function loadModel(model)
-    if type(model) == 'number' then
-        model = model
-    else
-        model = GetHashKey(model)
-    end
-    while not HasModelLoaded(model) do
-        RequestModel(model)
-        Citizen.Wait(0)
-    end
-end
-
-DrawScreenText = function(text, scale, posX, posY, color)
+function DrawScreenText(text, scale, posX, posY, color)
 	SetTextFont(0)
 	SetTextScale(scale, scale)
     SetTextDropShadow(0, 0, 0, 0, 0)
@@ -38,7 +20,7 @@ DrawScreenText = function(text, scale, posX, posY, color)
 	EndTextCommandDisplayText(posX, posY)
 end
 
-SecondsToClock = function(seconds)
+function SecondsToClock(seconds)
 	seconds = tonumber(seconds)
 	if seconds <= 0 then
 		return "00:00"
@@ -49,17 +31,39 @@ SecondsToClock = function(seconds)
 	end
 end
 
-
-function _TaskVehicleDriveToCoord(ped, vehicle, x, y, z, speed, p6, vehicleModel, drivingMode, stopRange, p10)
-    TaskVehicleDriveToCoord(ped, vehicle, x, y, z, speed, p6, vehicleModel, drivingMode, stopRange, p10)
-
-    while GetScriptTaskStatus(ped, 0x93A5526E) ~= 7 do
-        Wait(0)
-    end
-
-    return true
-end
-
 function DoesPedHaveAnyBag(ped)
     return GetPedDrawableVariation(ped, 5) > 0
+end
+
+---@param data table
+function AddEntityMenuItem(data)
+    if GetResourceState("exp_target_menu") == "started" then
+        exports.exp_target_menu:AddEntityMenuItem({
+            entity = data.entity,
+            event = data.event,
+            name = data.name,
+            desc = data.desc
+        })
+    end
+
+    if GetResourceState("ox_target") == "started" then
+        exports.ox_target:addLocalEntity(data.entity, {
+            label = data.desc,
+            name = data.event,
+            event = data.event,
+            distance = 1.5
+          })
+    end
+end
+
+---@param center vector3
+---@param radius number
+---@return vector3
+function GetRandomPositionInCircle(center, radius)
+    local angle = math.rad(math.random(0, 360))
+    local offsetX = (math.max(0.5, math.random()) * radius) * math.cos(angle)
+    local offsetY = (math.max(0.5, math.random()) * radius) * math.sin(angle)
+
+    local randomPosition = vector3(center.x + offsetX, center.y + offsetY, center.z+8.0)
+    return randomPosition
 end

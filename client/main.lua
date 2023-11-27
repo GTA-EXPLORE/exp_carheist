@@ -7,9 +7,13 @@ Citizen.CreateThread(function()
         SetEntityInvincible(ped, true)
         SetBlockingOfNonTemporaryEvents(ped, true)
         TaskStartScenarioInPlace(ped, "WORLD_HUMAN_SMOKING", 0, true)
-        TriggerEvent("exp_target_menu:AddEntityMenuItem", ped, "exp_carheist:StartHeist", _("start_npc_desc"), false)
-        TriggerEvent("exp_target_menu:SetEntityName", ped, _("start_npc_name"))
-
+        
+        AddEntityMenuItem({
+            entity = ped,
+            event = "exp_carheist:StartHeist",
+            desc = _("start_npc_desc"),
+            name = _("start_npc_name")
+        })
     end
 end)
 
@@ -52,39 +56,6 @@ function SetupCarHeist()
     TriggerServerEvent("exp_carheist:SpawnPlane")
 end
 
-function SpawnGuards()
-    SetPedRelationshipGroupHash(ped, GetHashKey('PLAYER'))
-    AddRelationshipGroup('GuardPeds')
-    for k, v in pairs(GUARDS) do
-        loadModel(v.model)
-        guardPeds[k] = CreatePed(4, v.model, v.coords, 1, 1, 0)
-        SetEntityHeading(guardPeds[k], v.heading)
-        NetworkRegisterEntityAsNetworked(guardPeds[k])
-        local networkID = NetworkGetNetworkIdFromEntity(guardPeds[k])
-        SetNetworkIdCanMigrate(networkID, true)
-        SetNetworkIdExistsOnAllMachines(networkID, true)
-        SetEntityAsMissionEntity(guardPeds[k])
-        SetEntityVisible(guardPeds[k], true)
-        SetPedRelationshipGroupHash(guardPeds[k], GetHashKey("GuardPeds"))
-        SetPedAccuracy(guardPeds[k], 50)
-        SetPedArmour(guardPeds[k], 100)
-        SetPedCanSwitchWeapon(guardPeds[k], true)
-        SetPedDropsWeaponsWhenDead(guardPeds[k], false)
-		SetPedFleeAttributes(guardPeds[k], 0, false)
-        GiveWeaponToPed(guardPeds[k], GetHashKey(v.weapon), 255, false, false)
-        SetPedRandomComponentVariation(guardPeds[k], 0)
-        SetPedRandomProps(guardPeds[k])
-        SetPedCombatAttributes(guardPeds[k], 46, true)
-        SetPedAlertness(guardPeds[k], 3)
-        TaskGuardCurrentPosition(guardPeds[k], 25.0, 25.0, 1)
-        Wait(50)
-    end
-    SetRelationshipBetweenGroups(0, GetHashKey("PLAYER"), GetHashKey("PLAYER"))
-    SetRelationshipBetweenGroups(0, GetHashKey("GuardPeds"), GetHashKey("GuardPeds"))
-	SetRelationshipBetweenGroups(5, GetHashKey("GuardPeds"), GetHashKey("PLAYER"))
-	SetRelationshipBetweenGroups(5, GetHashKey("PLAYER"), GetHashKey("GuardPeds"))
-end
-
 RegisterNetEvent("exp_carheist:EnterThread")
 AddEventHandler("exp_carheist:EnterThread", function(net_plane)
     local ped = PlayerPedId()
@@ -100,14 +71,14 @@ AddEventHandler("exp_carheist:EnterThread", function(net_plane)
                 break
             end
         end
-        Wait(2000)
+        Wait(500)
     end
 end)
 
 function SetupScene()
     TriggerServerCallback("exp_carheist:HaveVehiclesSpawn", function(has_spawned)
         if not has_spawned then
-            SpawnGuards()
+            SpawnGuards({ center = PLANE.coords})
             for i, v in ipairs(CARS) do
                 local x,y,z = table.unpack(PLANE.coords)
                 RequestModel(v.model)
@@ -116,9 +87,13 @@ function SetupScene()
                 FreezeEntityPosition(car, true)
                 SetVehicleDoorsLocked(car, 2)
                 AttachEntityToEntity(car, plane, 0, v.offset, 0.0, 0.0, GetEntityHeading(plane)-240, false, false, true, false, 1, true)
-    
-                TriggerEvent("exp_target_menu:AddEntityMenuItem", car, "exp_carheist:HackVehicle", _("hack"))
-                TriggerEvent("exp_target_menu:SetEntityName", car, _("vehicle_name", firstToUpper(GetDisplayNameFromVehicleModel(v.model):lower())))
+
+                AddEntityMenuItem({
+                    entity = car,
+                    event = "exp_carheist:HackVehicle",
+                    desc = _("hack"),
+                    name = _("vehicle_name", firstToUpper(GetDisplayNameFromVehicleModel(v.model):lower()))
+                })
             end
 
         else
@@ -129,8 +104,13 @@ function SetupScene()
             end
             for i, v in ipairs(vehicles) do
                 if GetEntityAttachedTo(v) == plane then
-                    TriggerEvent("exp_target_menu:AddEntityMenuItem", v, "exp_carheist:HackVehicle", _("hack"))
-                    TriggerEvent("exp_target_menu:SetEntityName", v, _("vehicle_name", firstToUpper(GetDisplayNameFromVehicleModel(GetEntityModel(v)):lower())))
+                    
+                    AddEntityMenuItem({
+                        entity = v,
+                        event = "exp_carheist:HackVehicle",
+                        desc = _("hack"),
+                        name = _("vehicle_name", firstToUpper(GetDisplayNameFromVehicleModel(v.model):lower()))
+                    })
                 end
             end
 
@@ -140,6 +120,7 @@ function SetupScene()
 end
 
 AddEventHandler("exp_carheist:HackVehicle", function(entity)
+    entity = type(entity) == "number" and entity or entity.entity
     HackVehicle(entity)
 end)
 
@@ -250,3 +231,35 @@ AddEventHandler("exp_carheist:ShowNotification", function(message, type)
         type = type
     })
 end)
+
+function SpawnGuards(data)
+
+    for index, value in ipairs(GUARDS.models) do
+        _RequestModel(GetHashKey(value))
+    end
+
+    local ped = PlayerPedId()
+
+    AddRelationshipGroup('GUARDS')
+    SetPedRelationshipGroupHash(ped, GetHashKey('PLAYER'))
+    SetRelationshipBetweenGroups(0, GetHashKey("GUARDS"), GetHashKey("GUARDS"))
+	SetRelationshipBetweenGroups(5, GetHashKey("GUARDS"), GetHashKey("PLAYER"))
+	SetRelationshipBetweenGroups(5, GetHashKey("PLAYER"), GetHashKey("GUARDS"))
+
+    for i = 1, GUARDS.amount do
+        local position = GetRandomPositionInCircle(data.center, GUARDS.spawn_range)
+        while not IsSpawnPointClear(position) do
+            position = GetRandomPositionInCircle(data.center, GUARDS.spawn_range)
+        end
+
+        local guard = CreatePed(0, GetHashKey(GUARDS.models[math.random(#GUARDS.models)]), position, 0.0, true, true)
+        SetEntityAsMissionEntity(guard)
+        SetPedRelationshipGroupHash(guard, GetHashKey("GUARDS"))
+        SetPedAccuracy(guard, GUARDS.accuracy)
+        SetPedArmour(guard, GUARDS.armour)
+        SetPedDropsWeaponsWhenDead(guard, false)
+        SetPedFleeAttributes(guard, 0, false)
+        GiveWeaponToPed(guard, GetHashKey(GUARDS.weapons[math.random(#GUARDS.weapons)]), 255, false, true)
+        TaskGuardCurrentPosition(guard, 10.0, 10.0, true)
+    end
+end

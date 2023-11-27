@@ -90,3 +90,7 @@ function SpawnNPC(model, position, heading)
 	-- SetEntityHeading(npc, heading)
 	return npc
 end
+
+function IsSpawnPointClear(coords)
+	return #EnumerateEntitiesWithinDistance(GetVehicles(), false, coords, 1.0) == 0
+end
