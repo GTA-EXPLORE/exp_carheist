@@ -147,14 +147,16 @@ function HackVehicle(vehicle)
 
         Wait(2000)
 
-        StartHotwire(function(success)
-            if success then
-                TriggerServerEvent("exp_carheist:FreeVehicle", NetworkGetNetworkIdFromEntity(vehicle))
-                FreezeEntityPosition(ped, false)
-                TaskWarpPedIntoVehicle(ped, vehicle, -1)
-                Deliver(vehicle)
-            end
+        StartHack(function()
+            TriggerServerEvent("exp_carheist:FreeVehicle", NetworkGetNetworkIdFromEntity(vehicle))
+            FreezeEntityPosition(ped, false)
+            TaskWarpPedIntoVehicle(ped, vehicle, -1)
+            Deliver(vehicle)
 
+            ClearPedTasks(ped)
+            DeleteObject(tablet)
+            FreezeEntityPosition(ped, false)
+        end, function()
             ClearPedTasks(ped)
             DeleteObject(tablet)
             FreezeEntityPosition(ped, false)
@@ -172,7 +174,7 @@ function Deliver(vehicle, no_info)
                 type = "default"
             })
             DeleteBlip("airport_blip")
-            local blip = SetBlip(_('buyer_blip'), "buyer_blip", DEALER_SCENE.finish, 500, 1, 0.8)
+            local blip = SetBlip(_('buyer_blip'), "buyer_blip", SELLER_SCENE.finish, 500, 1, 0.8)
             SetBlipAsShortRange(blip, false)
         end
         
@@ -180,7 +182,7 @@ function Deliver(vehicle, no_info)
         while true do Wait(_wait)
             if GetPedInVehicleSeat(vehicle, -1) == ped then
                 _wait = 500
-                if #(GetEntityCoords(ped) - DEALER_SCENE.start.coords) < 2.0 then
+                if #(GetEntityCoords(ped) - SELLER_SCENE.start.coords) < 2.0 then
                     break
                 end
             else
@@ -188,16 +190,15 @@ function Deliver(vehicle, no_info)
             end
         end
         
-        -- START CINEMATIC
         local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-        local camCoords = DEALER_SCENE.cam.coords
+        local camCoords = SELLER_SCENE.cam.coords
         SetCamActive(cam, true)
         RenderScriptCams(true, true, 1000, true, false)
         SetCamCoord(cam, camCoords)
-        SetCamRot(cam, DEALER_SCENE.cam.rotation)
+        SetCamRot(cam, SELLER_SCENE.cam.rotation)
     
         while true do Wait(1)
-            local dist = #(GetEntityCoords(vehicle) - DEALER_SCENE.finish)
+            local dist = #(GetEntityCoords(vehicle) - SELLER_SCENE.finish)
             if dist < 2.0 then
                 TriggerServerEvent("exp_carheist:SoldVehicle", GetEntityHealth(vehicle))
                 DeleteEntity(vehicle)

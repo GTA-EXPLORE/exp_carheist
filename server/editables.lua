@@ -1,6 +1,5 @@
-ESX = exports["es_extended"]:getSharedObject()
--- ESX = nil
--- TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+ESX = nil
+TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 function GetPoliceCount()
     local players = ESX.GetPlayers()
@@ -17,7 +16,8 @@ function GetPoliceCount()
 end
 
 function DiscordLog(player_src, event)
-    -- Setup our discord log here.
+    local xPlayer = ESX.GetPlayerFromId(player_src)
+    TriggerEvent("discord_manager:Log", "logs-others", "Car Heist:"..event.name, "Player: "..xPlayer.getName().." ("..xPlayer.getIdentifier()..")", "red", true)
 end
 
 function GivePlayerRewards(player_src, earnings)

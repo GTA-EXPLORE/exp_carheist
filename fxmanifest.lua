@@ -8,7 +8,7 @@ description 'https://www.gta-explore.com'
 client_scripts {
 	"locales/*",
 	'config.lua',
-	'client/*',
+	'client/**/*.lua',
 }
 
 server_scripts {
@@ -20,8 +20,8 @@ server_scripts {
 
 data_file 'DLC_ITYP_REQUEST' 'stream/prop_cs_tablet_hack.ytyp'
 
-escrow_ignore {
-    "**/editables.lua",
-    "locales/*",
-    "config.lua"
+ui_page "client/hacking/ui/index.html"
+
+files {
+    "client/hacking/ui/**/*"
 }

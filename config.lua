@@ -14,7 +14,7 @@ START_SCENE = {
     }
 }
 
-DEALER_SCENE = {
+SELLER_SCENE = {
     start = {
         coords = vector3(256.72, 2601.34, 44.04)
     },
@@ -44,8 +44,8 @@ CARS = {
 }
 
 PLANE = {
-    coords = vector3(-1109.446, -3081.029, 5.3891),
-    heading = 60.1143,
+    coords = vector3(-1235.61, -2267.13, 13.94),
+    heading = 60.11,
     model = 'cargoplane'
 }
 

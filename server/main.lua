@@ -47,7 +47,7 @@ AddEventHandler("exp_carheist:SoldVehicle", function(vehicle_health)
     local _source = source
     
     local ped = GetPlayerPed(_source)
-    if #(GetEntityCoords(ped) - DEALER_SCENE.finish) > 50.0 then
+    if #(GetEntityCoords(ped) - SELLER_SCENE.finish) > 50.0 then
         DiscordLog(_source, {
             name = "cheater"
         })

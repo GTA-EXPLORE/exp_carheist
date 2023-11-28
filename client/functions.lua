@@ -10,27 +10,6 @@ function _RequestModel(model)
     while not HasModelLoaded(model) do Wait(50) end
 end
 
-function DrawScreenText(text, scale, posX, posY, color)
-	SetTextFont(0)
-	SetTextScale(scale, scale)
-    SetTextDropShadow(0, 0, 0, 0, 0)
-	SetTextColour(color[1], color[2], color[3], 255)
-	BeginTextCommandDisplayText("STRING")
-    AddTextComponentSubstringPlayerName(text)
-	EndTextCommandDisplayText(posX, posY)
-end
-
-function SecondsToClock(seconds)
-	seconds = tonumber(seconds)
-	if seconds <= 0 then
-		return "00:00"
-	else
-		local mins = string.format("%02.f", math.floor(seconds / 60))
-		local secs = string.format("%02.f", math.floor(seconds - mins * 60))
-		return string.format("%s:%s", mins, secs)
-	end
-end
-
 function DoesPedHaveAnyBag(ped)
     return GetPedDrawableVariation(ped, 5) > 0
 end
@@ -64,6 +43,6 @@ function GetRandomPositionInCircle(center, radius)
     local offsetX = (math.max(0.5, math.random()) * radius) * math.cos(angle)
     local offsetY = (math.max(0.5, math.random()) * radius) * math.sin(angle)
 
-    local randomPosition = vector3(center.x + offsetX, center.y + offsetY, center.z+8.0)
+    local randomPosition = vector3(center.x + offsetX, center.y + offsetY, center.z)
     return randomPosition
 end
