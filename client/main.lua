@@ -161,7 +161,7 @@ function HackVehicle(vehicle)
             DeleteObject(tablet)
             FreezeEntityPosition(ped, false)
         end)
-    end, 'laptop')
+    end, HACK_ITEM)
 end
 
 function Deliver(vehicle, no_info)

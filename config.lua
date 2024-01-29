@@ -5,6 +5,8 @@ MAX_DAMAGE_LOSS = 10000
 POLICE_REQUIRED = 0
 INTERVAL = 60*60000 -- 60 minutes
 
+HACK_ITEM = 'laptop' -- Remove this line if hacking doesn't require any item.
+
 START_SCENE = {
     enable = true,
     ped = {

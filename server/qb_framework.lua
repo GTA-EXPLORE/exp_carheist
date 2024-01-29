@@ -22,6 +22,6 @@ if GetResourceState("qb-core") == "started" then
     
     function DoesPlayerHaveItem(source, item)
         local player_item = QBCore.Functions.GetPlayer(source).Functions.GetItemByName(item)
-        return player_item and player_item.amount >= 0 or false
+        return not item or (player_item and player_item.amount >= 0 or false)
     end
 end
