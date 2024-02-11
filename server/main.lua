@@ -16,7 +16,10 @@ end)
 local vehicles_spawned = false
 RegisterServerEvent("exp_carheist:SpawnPlane")
 AddEventHandler("exp_carheist:SpawnPlane", function()
-    local plane = CreateVehicle(PLANE.model, PLANE.coords, PLANE.heading, 1, 0)
+    local planeModel = GetHashKey(planeModel)
+    RequestModel(planeModel)
+    while not HasModelLoaded(planeModel) do Wait(50) end
+    local plane = CreateVehicle(planeModel, PLANE.coords, PLANE.heading, 1, 0)
     -- FreezeEntityPosition(plane, true)
     vehicles_spawned = false
     while not DoesEntityExist(plane) do Wait(1) end
