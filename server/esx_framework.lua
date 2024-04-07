@@ -29,6 +29,9 @@ if GetResourceState("es_extended") == "started" then
     end
     
     function DoesPlayerHaveItem(player_src, item)
-        return not item or ESX.GetPlayerFromId(player_src).getInventoryItem(item).count > 0
+        local playerItem = ESX.GetPlayerFromId(player_src).getInventoryItem(item)
+        if not item then return true end
+        if not playerItem then return false end
+        return ESX.GetPlayerFromId(player_src).getInventoryItem(item).count > 0
     end
 end
