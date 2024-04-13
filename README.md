@@ -2,7 +2,7 @@
 Experience the thrill of high-stakes heists with our exclusive **Car Heist** script! Take on the role of a master thief as you **eliminate guards**, skillfully **hack** into secured vehicles, and embark on daring missions to **deliver** your prized loot. Get ready for heart-pounding action and become the ultimate car heist maestro in the world of Los Santos.
 
 # Preview
-_Coming Soon._
+[https://www.youtube.com/watch?v=NYkCcq411nc](https://www.youtube.com/watch?v=NYkCcq411nc)
 
 # Install
 - Clone or Download the [repository](https://github.com/GTA-EXPLORE/exp_carheist).
